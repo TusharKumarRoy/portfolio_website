@@ -8,9 +8,6 @@ require_once __DIR__ . '/../config/database.php';
 
 // start session if not yet started
 
-if(session_status() === PHP_SESSION_NONE){
-    session_start();
-}
 
 /**
  * SECURITY FUNCTIONS
