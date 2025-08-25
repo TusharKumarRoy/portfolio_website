@@ -3,6 +3,9 @@ require_once '../includes/functions.php';
 
 requireAdmin();
 
+$success_message = '';
+$error_message = '';
+
 // Handle actions
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -11,6 +14,16 @@ if (isset($_GET['action'])) {
                 toggleProjectVisibility($_GET['id']);
                 header('Location: dashboard.php');
                 exit();
+            }
+            break;
+        case 'delete_project':
+            if (isset($_GET['id'])) {
+                $result = deleteProject($_GET['id']);
+                if ($result['success']) {
+                    $success_message = $result['message'];
+                } else {
+                    $error_message = $result['message'];
+                }
             }
             break;
         case 'mark_read':
@@ -55,6 +68,19 @@ $totalMessages = count($messages);
     </header>
 
     <div class="container">
+        <!-- Success/Error Messages -->
+        <?php if ($success_message): ?>
+            <div class="alert alert-success">
+                <?php echo htmlspecialchars($success_message); ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if ($error_message): ?>
+            <div class="alert alert-error">
+                <?php echo htmlspecialchars($error_message); ?>
+            </div>
+        <?php endif; ?>
+
         <!-- Statistics Cards -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -136,6 +162,11 @@ $totalMessages = count($messages);
                                         <?php if ($project['project_url']): ?>
                                             <a href="<?php echo htmlspecialchars($project['project_url']); ?>" target="_blank" class="btn btn-sm">View</a>
                                         <?php endif; ?>
+                                        <a href="dashboard.php?action=delete_project&id=<?php echo $project['id']; ?>" 
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Are you sure you want to DELETE this project? This action cannot be undone!')">
+                                            Delete
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

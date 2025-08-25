@@ -8,6 +8,9 @@ require_once __DIR__ . '/../config/database.php';
 
 // start session if not yet started
 
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
 
 /**
  * SECURITY FUNCTIONS
@@ -127,6 +130,32 @@ function updateProject($id, $data){
     ];
 
     return executeQuery($sql, $params) !== false;
+}
+
+
+function deleteProject($id) {
+    $project = getProject($id);
+    
+    if (!$project) {
+        return ['success' => false, 'message' => 'Project not found'];
+    }
+    
+    $sql = "DELETE FROM projects WHERE id = ?";
+    $result = executeQuery($sql, [$id]);
+    
+    if ($result !== false) {
+        
+        if (!empty($project['image_path'])) {
+            $imagePath = __DIR__ . '/../assets/images/' . $project['image_path'];
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+        
+        return ['success' => true, 'message' => 'Project deleted successfully'];
+    }
+    
+    return ['success' => false, 'message' => 'Failed to delete project'];
 }
 
 
