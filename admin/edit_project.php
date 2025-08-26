@@ -5,12 +5,26 @@ requireAdmin();
 
 $success_message = '';
 $error_message = '';
-$form_data = [];
+$project = null;
 
+// Get project ID
+$project_id = (int)($_GET['id'] ?? 0);
 
+if ($project_id <= 0) {
+    header('Location: dashboard.php');
+    exit();
+}
+
+// Get project data
+$project = getProject($project_id);
+
+if (!$project) {
+    header('Location: dashboard.php?error=project_not_found');
+    exit();
+}
+
+// Handle form submission
 if ($_POST) {
-    $form_data = $_POST;
-    
     // Validate required fields
     $title = sanitize($_POST['title'] ?? '');
     $short_description = sanitize($_POST['short_description'] ?? '');
@@ -44,18 +58,37 @@ if ($_POST) {
         $errors[] = 'GitHub URL is not valid';
     }
     
-    // Handle image upload
-    $image_path = '';
+    // Handle image upload (if new image provided)
+    $image_path = $project['image_path']; // Keep existing image by default
     if (isset($_FILES['project_image']) && $_FILES['project_image']['error'] !== UPLOAD_ERR_NO_FILE) {
         $upload_result = uploadProjectImage($_FILES['project_image']);
         if ($upload_result['success']) {
+            // Delete old image if it exists
+            if (!empty($project['image_path'])) {
+                $old_image_path = __DIR__ . '/../assets/images/' . $project['image_path'];
+                if (file_exists($old_image_path)) {
+                    unlink($old_image_path);
+                }
+            }
             $image_path = $upload_result['filename'];
         } else {
             $errors[] = 'Image upload failed: ' . $upload_result['message'];
         }
     }
     
-    // If no errors, save project
+    // Handle image removal
+    if (isset($_POST['remove_image']) && $_POST['remove_image'] === '1') {
+        // Delete existing image file
+        if (!empty($project['image_path'])) {
+            $old_image_path = __DIR__ . '/../assets/images/' . $project['image_path'];
+            if (file_exists($old_image_path)) {
+                unlink($old_image_path);
+            }
+        }
+        $image_path = '';
+    }
+    
+    // If no errors, update project
     if (empty($errors)) {
         $project_data = [
             'title' => $title,
@@ -68,11 +101,12 @@ if ($_POST) {
             'is_visible' => $is_visible
         ];
         
-        if (addProject($project_data)) {
-            $success_message = 'Project added successfully!';
-            $form_data = []; // Clear form data on success
+        if (updateProject($project_id, $project_data)) {
+            $success_message = 'Project updated successfully!';
+            // Refresh project data to show updated values
+            $project = getProject($project_id);
         } else {
-            $error_message = 'Failed to add project. Please try again.';
+            $error_message = 'Failed to update project. Please try again.';
         }
     } else {
         $error_message = implode('<br>', $errors);
@@ -84,9 +118,9 @@ if ($_POST) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Project - Admin</title>
+    <title>Edit Project - Admin</title>
     <link rel="stylesheet" href="../assets/css/admin_dashboard.css">
-    <link rel="stylesheet" href="../assets/css/admin_add_project.css">
+    <link rel="stylesheet" href="../assets/css/admin_edit_project.css">
 </head>
 <body>
     <!-- Header -->
@@ -102,7 +136,7 @@ if ($_POST) {
 
     <div class="container">
         <div class="page-header">
-            <h1>Add New Project</h1>
+            <h1>Edit Project</h1>
             <a href="dashboard.php" class="btn">← Back to Dashboard</a>
         </div>
 
@@ -120,7 +154,7 @@ if ($_POST) {
         <?php endif; ?>
 
         <div class="form-container">
-            <form method="POST" enctype="multipart/form-data" id="projectForm">
+            <form method="POST" enctype="multipart/form-data" id="editProjectForm">
                 <div class="form-group">
                     <label for="title">Project Title *</label>
                     <input type="text" 
@@ -128,7 +162,7 @@ if ($_POST) {
                            name="title" 
                            required
                            placeholder="Enter project title"
-                           value="<?php echo htmlspecialchars($form_data['title'] ?? ''); ?>">
+                           value="<?php echo htmlspecialchars($project['title']); ?>">
                 </div>
 
                 <div class="form-group">
@@ -136,7 +170,7 @@ if ($_POST) {
                     <textarea id="short_description" 
                               name="short_description" 
                               required
-                              placeholder="Brief description of your project"><?php echo htmlspecialchars($form_data['short_description'] ?? ''); ?></textarea>
+                              placeholder="Brief description of your project"><?php echo htmlspecialchars($project['short_description']); ?></textarea>
                 </div>
 
                 <div class="form-group">
@@ -146,17 +180,30 @@ if ($_POST) {
                            name="technologies" 
                            required
                            placeholder="e.g., HTML, CSS, JavaScript, PHP, React"
-                           value="<?php echo htmlspecialchars($form_data['technologies'] ?? ''); ?>">
+                           value="<?php echo htmlspecialchars($project['technologies']); ?>">
                 </div>
 
                 <div class="form-group">
                     <label for="project_image">Project Image</label>
+                    
+                    <?php if (!empty($project['image_path'])): ?>
+                        <div class="current-image" id="currentImageDiv">
+                            <p><strong>Current Image:</strong></p>
+                            <img src="../assets/images/<?php echo htmlspecialchars($project['image_path']); ?>" 
+                                 alt="<?php echo htmlspecialchars($project['title']); ?>">
+                            <div class="image-actions">
+                                <button type="button" class="remove-image-btn" onclick="removeCurrentImage()">Remove Current Image</button>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
                     <input type="file" 
                            id="project_image" 
                            name="project_image" 
                            accept="image/*"
                            onchange="previewImage(this)">
-                    <small>Supported formats: JPG, JPEG, PNG, GIF. Max size: 5MB</small>
+                    <input type="hidden" id="remove_image" name="remove_image" value="0">
+                    <small style="color: #666;">Supported formats: JPG, JPEG, PNG, GIF. Max size: 5MB</small>
                     <img id="imagePreview" class="image-preview" alt="Preview">
                 </div>
 
@@ -166,7 +213,7 @@ if ($_POST) {
                            id="project_url" 
                            name="project_url" 
                            placeholder="https://example.com"
-                           value="<?php echo htmlspecialchars($form_data['project_url'] ?? ''); ?>">
+                           value="<?php echo htmlspecialchars($project['project_url']); ?>">
                 </div>
 
                 <div class="form-group half">
@@ -175,7 +222,7 @@ if ($_POST) {
                            id="github_url" 
                            name="github_url" 
                            placeholder="https://github.com/username/project"
-                           value="<?php echo htmlspecialchars($form_data['github_url'] ?? ''); ?>">
+                           value="<?php echo htmlspecialchars($project['github_url']); ?>">
                 </div>
 
                 <div class="form-group half">
@@ -185,8 +232,8 @@ if ($_POST) {
                            name="display_order" 
                            min="0"
                            placeholder="0"
-                           value="<?php echo htmlspecialchars($form_data['display_order'] ?? '0'); ?>">
-                    <small>Lower numbers appear first</small>
+                           value="<?php echo htmlspecialchars($project['display_order']); ?>">
+                    <small style="color: #666;">Lower numbers appear first</small>
                 </div>
 
                 <div class="form-group half">
@@ -195,13 +242,13 @@ if ($_POST) {
                                id="is_visible" 
                                name="is_visible" 
                                value="1"
-                               <?php echo (isset($form_data['is_visible']) || !isset($form_data['title'])) ? 'checked' : ''; ?>>
+                               <?php echo $project['is_visible'] ? 'checked' : ''; ?>>
                         <label for="is_visible">Make project visible on portfolio</label>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-success" id="submitBtn">Add Project</button>
+                    <button type="submit" class="btn btn-success">Update Project</button>
                     <a href="dashboard.php" class="btn-cancel">Cancel</a>
                 </div>
             </form>
@@ -214,23 +261,6 @@ if ($_POST) {
             const file = input.files[0];
             
             if (file) {
-                // Check file size (5MB limit)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('File size must be less than 5MB');
-                    input.value = '';
-                    preview.style.display = 'none';
-                    return;
-                }
-                
-                // Check file type
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-                if (!allowedTypes.includes(file.type)) {
-                    alert('Please select a valid image file (JPG, JPEG, PNG, GIF)');
-                    input.value = '';
-                    preview.style.display = 'none';
-                    return;
-                }
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
@@ -241,83 +271,13 @@ if ($_POST) {
                 preview.style.display = 'none';
             }
         }
-
-        // Form validation
-        document.getElementById('projectForm').addEventListener('submit', function(e) {
-            const submitBtn = document.getElementById('submitBtn');
-            
-            // Add loading state
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Adding Project...';
-            
-            // Basic client-side validation
-            const requiredFields = ['title', 'short_description', 'technologies'];
-            let isValid = true;
-            
-            requiredFields.forEach(fieldName => {
-                const field = document.getElementById(fieldName);
-                if (!field.value.trim()) {
-                    field.classList.add('error');
-                    isValid = false;
-                } else {
-                    field.classList.remove('error');
-                    field.classList.add('success');
-                }
-            });
-            
-            // Validate URLs if provided
-            const urlFields = ['project_url', 'github_url'];
-            urlFields.forEach(fieldName => {
-                const field = document.getElementById(fieldName);
-                if (field.value && !isValidUrl(field.value)) {
-                    field.classList.add('error');
-                    isValid = false;
-                } else if (field.value) {
-                    field.classList.remove('error');
-                    field.classList.add('success');
-                }
-            });
-            
-            if (!isValid) {
-                e.preventDefault();
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Add Project';
-                alert('Please correct the highlighted fields');
-            }
-        });
-
-        // URL validation function
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
+        
+        function removeCurrentImage() {
+            if (confirm('Are you sure you want to remove the current image?')) {
+                document.getElementById('remove_image').value = '1';
+                document.getElementById('currentImageDiv').style.display = 'none';
             }
         }
-
-        // Real-time validation
-        const inputs = document.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            input.addEventListener('blur', function() {
-                if (this.hasAttribute('required') && !this.value.trim()) {
-                    this.classList.add('error');
-                    this.classList.remove('success');
-                } else if (this.value.trim()) {
-                    this.classList.remove('error');
-                    this.classList.add('success');
-                }
-            });
-        });
-
-        // Auto-resize textarea
-        const textarea = document.getElementById('short_description');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.max(this.scrollHeight, 100) + 'px';
-        });
     </script>
 </body>
 </html>

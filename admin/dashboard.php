@@ -68,19 +68,7 @@ $totalMessages = count($messages);
     </header>
 
     <div class="container">
-        <!-- Success/Error Messages -->
-        <?php if ($success_message): ?>
-            <div class="alert alert-success">
-                <?php echo htmlspecialchars($success_message); ?>
-            </div>
-        <?php endif; ?>
         
-        <?php if ($error_message): ?>
-            <div class="alert alert-error">
-                <?php echo htmlspecialchars($error_message); ?>
-            </div>
-        <?php endif; ?>
-
         <!-- Statistics Cards -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -113,7 +101,8 @@ $totalMessages = count($messages);
                     <div class="empty-state">
                         <h3>No projects yet</h3>
                         <p>Start by adding your first project!</p>
-                        <a href="add_project.php" class="btn btn-success">Add Project</a>
+                        <br>
+                        <a href="add_project.php" class="btn btn-success">Add New Project</a>
                     </div>
                 <?php else: ?>
                     <table>
