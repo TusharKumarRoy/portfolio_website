@@ -222,5 +222,8 @@ $totalMessages = count($messages);
             </div>
         </section>
     </div>
+
+    <script src="../assets/js/admin_script.js"></script>
+
 </body>
 </html>

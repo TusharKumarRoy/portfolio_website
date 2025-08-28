@@ -95,10 +95,10 @@ if (isset($_GET['success']) && $_GET['success'] == '1') {
                     <a href="#contact" class="btn">Contact</a>
                 </div>
                 <div class="social-handles">
-                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://github.com/TusharKumarRoy"><i class="fa-brands fa-github"></i></a>
                     <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://wa.me/+8801319142561/"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/tusharkumar.roy71/"><i class="fa-brands fa-facebook"></i></a>
                 </div>
             </div>
         </div>
