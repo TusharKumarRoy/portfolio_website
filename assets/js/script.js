@@ -65,8 +65,15 @@ navLinks.forEach(link => {
         const targetSection = document.getElementById(targetId);
         
         if (targetSection) {
-            const headerHeight = document.querySelector('.header').offsetHeight + 20;
-            const targetPosition = targetSection.offsetTop - headerHeight;
+            let targetPosition;
+            
+            // Special handling for contact section - scroll to bottom
+            if (targetId === 'contact') {
+                targetPosition = document.body.scrollHeight;
+            } else {
+                const headerHeight = document.querySelector('.header').offsetHeight + 20;
+                targetPosition = targetSection.offsetTop - headerHeight;
+            }
             
             window.scrollTo({
                 top: targetPosition,
@@ -209,23 +216,6 @@ function showAlert(message, type) {
     });
 }
 
-// Header scroll effect (optional enhancement)
-let lastScrollY = window.scrollY;
-
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('.header');
-    const currentScrollY = window.scrollY;
-    
-    if (currentScrollY > 100) {
-        header.style.background = 'rgba(0, 0, 0, 0.4)';
-        header.style.backdropFilter = 'blur(15px)';
-    } else {
-        header.style.background = 'rgba(0, 0, 0, 0.24)';
-        header.style.backdropFilter = 'blur(10px)';
-    }
-    
-    lastScrollY = currentScrollY;
-});
 
 // Intersection Observer for animations (optional enhancement)
 const observerOptions = {
@@ -290,11 +280,9 @@ if (window.performance && window.performance.navigation.type === window.performa
     }
 }
 
-
+// Admin dashboard shortcut
 document.addEventListener("keydown", function(event) {
- 
     if (event.ctrlKey && event.altKey && event.key.toLowerCase() === ".") {
         window.location.href = "http://localhost/Full%20Stack%20Projects/portfolio_website/admin/dashboard.php";
     }
 });
-

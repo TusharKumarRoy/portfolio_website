@@ -189,6 +189,11 @@ function getAllContactMessages() {
     return fetchAll($sql) ?: [];
 }
 
+function getContactMessage($id) {
+    $sql = "SELECT * FROM contact_messages WHERE id = ?";
+    return fetchRow($sql, [$id]);
+}
+
 function getUnreadContactCount() {
     $sql = "SELECT COUNT(*) as count FROM contact_messages WHERE is_read = 0";
     $result = fetchRow($sql);
@@ -198,6 +203,24 @@ function getUnreadContactCount() {
 function markMessageAsRead($id) {
     $sql = "UPDATE contact_messages SET is_read = 1 WHERE id = ?";
     return executeQuery($sql, [$id]) !== false;
+}
+
+function deleteContactMessage($id) {
+    // First check if message exists
+    $message = getContactMessage($id);
+    
+    if (!$message) {
+        return ['success' => false, 'message' => 'Message not found'];
+    }
+    
+    $sql = "DELETE FROM contact_messages WHERE id = ?";
+    $result = executeQuery($sql, [$id]);
+    
+    if ($result !== false) {
+        return ['success' => true, 'message' => 'Message deleted successfully'];
+    }
+    
+    return ['success' => false, 'message' => 'Failed to delete message'];
 }
 
 
