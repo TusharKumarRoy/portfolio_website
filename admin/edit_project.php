@@ -137,7 +137,7 @@ if ($_POST) {
     <div class="container">
         <div class="page-header">
             <h1>Edit Project</h1>
-            <a href="dashboard.php" class="btn">← Back to Dashboard</a>
+            <a href="dashboard.php" class="btn btn-back">← Back to Dashboard</a>
         </div>
 
         <!-- Success/Error Messages -->

@@ -103,7 +103,7 @@ if ($_POST) {
     <div class="container">
         <div class="page-header">
             <h1>Add New Project</h1>
-            <a href="dashboard.php" class="btn">← Back to Dashboard</a>
+            <a href="dashboard.php" class="btn btn-back ">← Back to Dashboard</a>
         </div>
 
         <!-- Success/Error Messages -->
@@ -201,8 +201,8 @@ if ($_POST) {
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-success" id="submitBtn">Add Project</button>
-                    <a href="dashboard.php" class="btn-cancel">Cancel</a>
+                    <button type="submit" class="btn btn-sm btn-success" id="submitBtn">Add Project</button>
+                    <a href="dashboard.php" class="btn btn-sm btn-cancel">Cancel</a>
                 </div>
             </form>
         </div>

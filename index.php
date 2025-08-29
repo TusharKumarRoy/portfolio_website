@@ -67,7 +67,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1') {
 <body>
 
     <header class="header">
-        <a href="#" class="logo"><span>Tushar + Sonali</span></a>
+        <a href="#" class="logo"><span>Tushar Kumar</span></a>
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
             <li><a href="#experiences">Experience</a></li>

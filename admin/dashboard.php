@@ -78,15 +78,18 @@ $totalMessages = count($messages);
 </header>
 
 <div class="container">
-    
-    <!-- Success/Error Messages -->
+
+<!-- 
+    Success/Error Messages
     <?php if ($success_message): ?>
         <div class="alert alert-success"><?php echo htmlspecialchars($success_message); ?></div>
     <?php endif; ?>
     <?php if ($error_message): ?>
         <div class="alert alert-error"><?php echo htmlspecialchars($error_message); ?></div>
     <?php endif; ?>
-    
+-->
+
+
     <!-- Statistics Cards -->
     <div class="stats-grid">
         <div class="stat-card"><div class="stat-number"><?php echo $totalProjects; ?></div><div class="stat-label">Total Projects</div></div>
@@ -148,7 +151,7 @@ $totalMessages = count($messages);
                                        <?php echo $project['is_visible'] ? 'Hide':'Show'; ?>
                                     </a>
                                     <?php if ($project['project_url']): ?>
-                                        <a href="<?php echo htmlspecialchars($project['project_url']); ?>" target="_blank" class="btn btn-sm">View</a>
+                                        <a href="<?php echo htmlspecialchars($project['project_url']); ?>" target="_blank" class="btn btn-sm btn-visit">Visit</a>
                                     <?php endif; ?>
                                     <a href="dashboard.php?action=delete_project&id=<?php echo $project['id']; ?>" 
                                        class="btn btn-sm btn-danger"
@@ -194,7 +197,7 @@ $totalMessages = count($messages);
                                 <div class="action-buttons">
                                     <!-- VIEW BUTTON USING DATA ATTRIBUTES -->
                                     <button 
-                                        class="btn btn-sm btn-info view-btn"
+                                        class="btn btn-sm view-btn"
                                         data-id="<?php echo $message['id']; ?>"
                                         data-name="<?php echo htmlspecialchars($message['name'], ENT_QUOTES); ?>"
                                         data-email="<?php echo htmlspecialchars($message['email'], ENT_QUOTES); ?>"
@@ -240,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h3>Message Details</h3>
-                            <span class="close-modal">&times;</span>
                         </div>
                         <div class="modal-body">
                             <div class="message-form">
@@ -252,9 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <a href="mailto:${email}?subject=Re: ${encodeURIComponent(subject)}" class="btn btn-success">Reply via Email</a>
-                            <button class="btn btn-secondary close-modal">Close</button>
-                            <a href="dashboard.php?action=mark_read&id=${id}" class="btn btn-info">Mark as Read</a>
+                            <a href="mailto:${email}?subject=Re: ${encodeURIComponent(subject)}" class="btn btn-sm btn-success">Reply via Email</a>
+                            <button class="btn btn-sm close-modal">Close</button>
+                            <a href="dashboard.php?action=mark_read&id=${id}" class="btn btn-sm btn-success">Mark as Read</a>
                         </div>
                     </div>
                 </div>

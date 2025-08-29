@@ -3,7 +3,7 @@
 .form-container {
     max-width: 800px;
     margin: 0 auto;
-    background: white;
+    background-color: rgba(243, 245, 233, 0.807);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -17,7 +17,7 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #333;
+    color: #000000;
 }
 
 .form-group input,
@@ -26,6 +26,7 @@
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
+    background-color: rgba(245, 248, 238, 0.807);
     border-radius: 5px;
     font-size: 14px;
     box-sizing: border-box;
@@ -36,8 +37,8 @@
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #35372b;
+    box-shadow: 0 0 0 2px rgba(25, 29, 21, 0.25);
 }
 
 .form-group textarea {
@@ -80,16 +81,15 @@
     flex-wrap: wrap;
 }
 
+
 .btn-cancel {
     background: #6c757d;
     color: white;
     text-decoration: none;
-    padding: 10px 20px;
     border-radius: 5px;
     display: inline-block;
     border: none;
     cursor: pointer;
-    font-size: 14px;
     transition: background-color 0.2s ease;
 }
 
@@ -235,6 +235,7 @@
     .btn-cancel,
     .btn {
         text-align: center;
+         justify-content: center;
     }
 }
 
