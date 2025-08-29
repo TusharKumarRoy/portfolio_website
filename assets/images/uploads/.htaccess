@@ -1,0 +1,57 @@
+# Security for uploads directory - CRITICAL for preventing code execution
+
+# Disable PHP execution completely
+php_flag engine off
+
+# Prevent execution of any server-side scripts
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|php8|pl|py|jsp|asp|sh|cgi)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Only allow image files
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Block everything else by default
+<FilesMatch "^.*$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Re-allow image files (this overrides the block above)
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Prevent access to hidden files
+<FilesMatch "^\.">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block suspicious file types that could be disguised
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|txt|tar|gz)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Additional security headers
+<IfModule mod_headers.c>
+    # Prevent files from being executed as scripts
+    Header set X-Content-Type-Options nosniff
+    
+    # Only allow images to be embedded in frames from same origin
+    Header set X-Frame-Options SAMEORIGIN
+    
+    # Force download for certain file types (optional)
+    # <FilesMatch "\.(pdf|doc|docx)$">
+    #     Header set Content-Disposition "attachment"
+    # </FilesMatch>
+</IfModule>
+
+# Limit file size (adjust as needed - this is 10MB)
+LimitRequestBody 10485760
