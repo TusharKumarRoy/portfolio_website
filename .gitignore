@@ -1,2 +1,11 @@
+# Environment / config files
 .env.php
+config/database.php
+
+# SQL files
 /sql/portfolio_database.sql
+
+# Optional: uploads, caches, or other sensitive files
+uploads/
+assets/uploads/
+
