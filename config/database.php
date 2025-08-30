@@ -2,10 +2,13 @@
 
 /* Database configuration */
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'portfolio_database');
-define('DB_USER', 'tusharkumarroy');
-define('DB_PASS', 'oparthib_');
+$config = require __DIR__ . '/../.env.php';
+
+define('DB_HOST', $config['DB_HOST']);
+define('DB_NAME', $config['DB_NAME']);
+define('DB_USER', $config['DB_USER']);
+define('DB_PASS', $config['DB_PASS']);
+
 
 // pdo = php data object
 // dsn = data source name
