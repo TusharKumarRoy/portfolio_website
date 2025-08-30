@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <a href="https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(email)}&su=Re:%20${encodeURIComponent(subject)}" target="_blank" class="btn btn-sm btn-success">Reply via Email</a>
+                            <a href="https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(email)}" target="_blank" class="btn btn-sm btn-success">Reply via Email</a>
                             <button class="btn btn-sm close-modal">Close</button>
                             <a href="dashboard.php?action=mark_read&id=${id}" class="btn btn-sm btn-success">Mark as Read</a>
                         </div>
