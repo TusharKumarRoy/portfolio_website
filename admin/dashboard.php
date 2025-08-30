@@ -222,6 +222,8 @@ $totalMessages = count($messages);
 </div>
 
 <script src="../assets/js/admin_script.js"></script>
+<script src="/assets/js/shortcut_toggle.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.view-btn').forEach(button => {

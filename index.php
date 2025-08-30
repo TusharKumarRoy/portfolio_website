@@ -227,6 +227,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1') {
 
     <!-- JS -->
     <script src="assets/js/script.js"></script>
+    <script src="/assets/js/shortcut_toggle.js"></script>
 </body>
 
 </html>
