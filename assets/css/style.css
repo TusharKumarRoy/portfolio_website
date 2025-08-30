@@ -767,7 +767,7 @@ section {
 }
 
 /* Small mobile screens */
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 770px) {
     .header {
         width: 95%;
         gap: 0.5rem;
@@ -831,9 +831,12 @@ section {
         padding: 0.8rem 1rem;
     }
     
-    .submit-btn {
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
+   .submit-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
     }
     
     .mobile-nav-links li a {

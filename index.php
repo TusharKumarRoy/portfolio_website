@@ -95,10 +95,11 @@ if (isset($_GET['success']) && $_GET['success'] == '1') {
                     <a href="#contact" class="btn">Contact</a>
                 </div>
                 <div class="social-handles">
-                    <a href="https://github.com/TusharKumarRoy"><i class="fa-brands fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/tushar-kumar-roy-b53b541b7/"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="https://wa.me/+8801319142561/"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="https://www.facebook.com/tusharkumar.roy71/"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://github.com/TusharKumarRoy" oncontextmenu="navigator.clipboard.writeText('https://github.com/TusharKumarRoy').then(() => alert('GitHub link copied!')); return false;"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/tushar-kumar-roy-b53b541b7/" oncontextmenu="navigator.clipboard.writeText('https://www.linkedin.com/in/tushar-kumar-roy-b53b541b7/').then(() => alert('LinkedIn link copied!')); return false;"> <i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://mail.google.com/mail/?view=cm&to=tusharkumarroy.dev@gmail.com" target="_blank" oncontextmenu="navigator.clipboard.writeText('tusharkumarroy.dev@gmail.com').then(() => alert('Email copied!')); return false;"><i class="fa-solid fa-envelope"></i></a>
+                    <a href="https://wa.me/+8801319142561/" oncontextmenu="navigator.clipboard.writeText('+8801319142561').then(() => alert('WhatsApp number copied!')); return false;"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/tusharkumar.roy71/"  oncontextmenu="navigator.clipboard.writeText('https://www.facebook.com/tusharkumar.roy71/').then(() => alert('Facebook link copied!')); return false;"><i class="fa-brands fa-facebook"></i></a>
                 </div>
             </div>
         </div>
@@ -152,7 +153,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1') {
                             <p><?php echo htmlspecialchars($project['short_description']); ?></p>
                             <div class="btn-group">
                                 <?php if(!empty($project['project_url'])): ?>
-                                    <a href="<?php echo $project['project_url']; ?>" target="_blank" class="btn">Live Demo</a>
+                                    <a href="<?php echo $project['project_url']; ?>" target="_blank" class="btn">Visit Website</a>
                                 <?php endif; ?>
                                 <?php if(!empty($project['github_url'])): ?>
                                     <a href="<?php echo $project['github_url']; ?>" target="_blank" class="btn">Github Repo</a>

@@ -73,13 +73,13 @@ $totalMessages = count($messages);
         <div class="user-info">
             <span>Welcome, <?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
             <a href="logout.php" class="logout-btn">Logout</a>
-        </div>
+    </div>
     </div>
 </header>
 
 <div class="container">
 
-<!-- 
+<?php /*
     Success/Error Messages
     <?php if ($success_message): ?>
         <div class="alert alert-success"><?php echo htmlspecialchars($success_message); ?></div>
@@ -87,7 +87,7 @@ $totalMessages = count($messages);
     <?php if ($error_message): ?>
         <div class="alert alert-error"><?php echo htmlspecialchars($error_message); ?></div>
     <?php endif; ?>
--->
+*/ ?>
 
 
     <!-- Statistics Cards -->
@@ -144,7 +144,7 @@ $totalMessages = count($messages);
                             <td><?php echo $project['display_order']; ?></td>
                             <td>
                                 <div class="action-buttons">
-                                    <a href="edit_project.php?id=<?php echo $project['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="edit_project.php?id=<?php echo $project['id']; ?>" class="btn btn-sm btn-success">Edit</a>
                                     <a href="dashboard.php?action=toggle_project&id=<?php echo $project['id']; ?>" 
                                        class="btn btn-sm <?php echo $project['is_visible'] ? 'btn-danger':'btn-success'; ?>"
                                        onclick="return confirm('Are you sure you want to <?php echo $project['is_visible'] ? 'hide':'show'; ?> this project?')">
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <a href="mailto:${email}?subject=Re: ${encodeURIComponent(subject)}" class="btn btn-sm btn-success">Reply via Email</a>
+                            <a href="https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(email)}&su=Re:%20${encodeURIComponent(subject)}" target="_blank" class="btn btn-sm btn-success">Reply via Email</a>
                             <button class="btn btn-sm close-modal">Close</button>
                             <a href="dashboard.php?action=mark_read&id=${id}" class="btn btn-sm btn-success">Mark as Read</a>
                         </div>

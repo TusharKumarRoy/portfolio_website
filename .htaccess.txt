@@ -14,7 +14,7 @@ RewriteRule ^admin/add-project/?$ admin/add_project.php [L]
 RewriteRule ^admin/edit-project/([0-9]+)/?$ admin/edit_project.php?id=$1 [L]
 
 # Contact form
-RewriteRule ^contact/?$ contact.php [L]
+#RewriteRule ^contact/?$ contact.php [L]
 
 # ----------------------------
 # DENY ACCESS TO SENSITIVE FILES

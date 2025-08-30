@@ -141,14 +141,6 @@ body {
     box-shadow: 0 8px 20px rgba(127, 174, 39, 0.3);
 }
 
-.btn-warning {
-    background: #7cb12db4;
-}
-
-.btn-warning:hover {
-    box-shadow: 0 8px 20px rgba(137, 188, 28, 0.3);
-}
-
 .btn-danger {
     background: #a99836;
 }
@@ -267,13 +259,14 @@ tbody tr:hover {
 /* Empty State */
 .empty-state {
     text-align: center;
+    background-color: rgba(253, 255, 250, 0.7);;
     padding: 3rem 2rem;
-    color: #7f8c8d;
+    color: #000000;
 }
 
 .empty-state h3 {
     margin-bottom: 1rem;
-    color: #95a5a6;
+    color: #000000;
 }
 
 /* Responsive */

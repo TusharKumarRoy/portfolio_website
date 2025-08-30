@@ -1,4 +1,3 @@
 .env.php
-config/database.php
 /sql/portfolio_database.sql
 assets/images/uploads/
