@@ -1,0 +1,81 @@
+# ----------------------------
+# ENABLE URL REWRITING
+# ----------------------------
+RewriteEngine On
+
+# Pretty URLs for admin
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^admin/?$ admin/dashboard.php [L]
+RewriteRule ^admin/login/?$ admin/login.php [L]
+RewriteRule ^admin/logout/?$ admin/logout.php [L]
+RewriteRule ^admin/projects/?$ admin/dashboard.php [L]
+RewriteRule ^admin/add-project/?$ admin/add_project.php [L]
+RewriteRule ^admin/edit-project/([0-9]+)/?$ admin/edit_project.php?id=$1 [L]
+
+# Contact form
+RewriteRule ^contact/?$ contact.php [L]
+
+# ----------------------------
+# DENY ACCESS TO SENSITIVE FILES
+# ----------------------------
+<Files ".htaccess">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<FilesMatch "(\.gitignore|\.env\.php|database\.php|functions\.php|config\.php)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevent access to backup files
+<FilesMatch "\.(bak|backup|old|orig|save|swp|tmp)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ----------------------------
+# UPLOADS FOLDER SECURITY
+# ----------------------------
+<If "%{REQUEST_URI} =~ m#^/uploads/#">
+    # Disable PHP & scripts
+    <FilesMatch "\.(php|phtml|pl|py|jsp|asp|sh|cgi)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+
+    # Allow only images
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)$">
+        Order Allow,Deny
+        Allow from all
+    </FilesMatch>
+
+    # Block hidden files
+    <FilesMatch "^\.">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+</If>
+
+# ----------------------------
+# SECURITY HEADERS
+# ----------------------------
+<IfModule mod_headers.c>
+    Header set X-Frame-Options SAMEORIGIN
+    Header set X-Content-Type-Options nosniff
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ----------------------------
+# ERROR PAGES
+# ----------------------------
+ErrorDocument 404 /404.html
+ErrorDocument 403 /403.html
+ErrorDocument 500 /500.html
+
+# ----------------------------
+# DISABLE DIRECTORY LISTING
+# ----------------------------
+Options -Indexes
