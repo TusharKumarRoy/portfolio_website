@@ -6,6 +6,8 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+date_default_timezone_set('Asia/Dhaka');
+
 // start session if not yet started
 
 if(session_status() === PHP_SESSION_NONE){

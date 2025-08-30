@@ -191,7 +191,7 @@ $totalMessages = count($messages);
                         <tr style="<?php echo !$message['is_read'] ? 'background:#fff3cd;' : ''; ?>">
                             <td><strong><?php echo htmlspecialchars($message['name']); ?></strong></td>
                             <td><?php echo htmlspecialchars($message['email']); ?></td>
-                            <td><?php echo date('M j, Y', strtotime($message['created_at'])); ?></td>
+                            <td><?php echo date('M j, Y', strtotime($message['created_at']) + (12*3600) + (60*60)); ?></td>
                             <td><span class="status-badge <?php echo $message['is_read'] ? 'status-read':'status-unread'; ?>"><?php echo $message['is_read'] ? 'Read':'New'; ?></span></td>
                             <td>
                                 <div class="action-buttons">
@@ -203,7 +203,7 @@ $totalMessages = count($messages);
                                         data-email="<?php echo htmlspecialchars($message['email'], ENT_QUOTES); ?>"
                                         data-subject="<?php echo htmlspecialchars($message['subject'] ?: 'No Subject', ENT_QUOTES); ?>"
                                         data-message="<?php echo htmlspecialchars($message['message'], ENT_QUOTES); ?>"
-                                        data-date="<?php echo date('M j, Y g:i A', strtotime($message['created_at'])); ?>"
+                                        data-date="<?php echo date('M j, Y g:i A', strtotime($message['created_at']) + (12*3600) + (60*60)); ?>"
                                     >View</button>
                                     <a href="dashboard.php?action=delete_message&id=<?php echo $message['id']; ?>" 
                                        class="btn btn-sm btn-danger"
