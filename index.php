@@ -1,4 +1,5 @@
 <?php
+require_once 'includes/send_mail.php';
 require_once 'includes/functions.php';
 
 // Fetch visible projects
@@ -19,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $contact_error = "Invalid email address.";
     } else {
+        // Save to database first
         $data = [
             'name' => $name,
             'email' => $email,
@@ -26,13 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'message' => $message
         ];
 
-        if (addContactMessage($data)) {
-            // Redirect to prevent form resubmission
-            header('Location: ' . $_SERVER['REQUEST_URI'] . '?success=1');
-            exit();
-        } else {
-            $contact_error = "Failed to send message. Try again.";
-        }
+        $db_saved = addContactMessage($data);
+        $mail_sent = sendContactEmail($name, $email, $subject, $message);
+
+            if ($db_saved && $mail_sent) {
+                header('Location: ' . $_SERVER['REQUEST_URI'] . '?success=1');
+                exit();
+            } elseif ($db_saved) {
+                $contact_error = "Message saved but email failed to send.";
+            } else {
+                $contact_error = "Failed to save message.";
+            }
+    
     }
 }
 
