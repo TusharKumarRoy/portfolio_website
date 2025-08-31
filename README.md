@@ -13,7 +13,7 @@ A personal portfolio website built with PHP, MySQL, and a custom admin panel to 
 
     .📂 Admin panel for managing portfolio content and viewing messages
 
-    .⚡Works both locally (XAMPP) and in production (InfinityFree)
+    .⚡ Works both locally (XAMPP) and in production (InfinityFree)
 
 
 🛠️ Tech Stack
