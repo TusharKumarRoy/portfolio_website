@@ -11,55 +11,37 @@ function sendContactEmail($name, $email, $subject, $message) {
     $mail = new PHPMailer(true);
 
     try {
-        // Detect environment - check multiple conditions for better detection
-        $isLocal = (
-            in_array($_SERVER['SERVER_NAME'], ['localhost', '127.0.0.1']) ||
-            strpos($_SERVER['SERVER_NAME'], 'localhost') !== false ||
-            strpos($_SERVER['HTTP_HOST'], 'localhost') !== false ||
-            $_SERVER['SERVER_NAME'] === '::1'
-        );
+        // Always use SMTP (InfinityFree does not allow mail()/sendmail)
+        $mail->isSMTP();
+        $mail->Host       = $config['smtp_host'];
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $config['smtp_user'];
+        $mail->Password   = $config['smtp_pass'];
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = $config['smtp_port'];
+        $mail->Timeout    = $config['timeout'] ?? 60;
 
-        if ($isLocal) {
-            // LOCAL: Gmail SMTP
-            $mail->isSMTP();
-            $mail->Host       = $config['smtp_host'];
-            $mail->SMTPAuth   = true;
-            $mail->Username   = $config['smtp_user'];
-            $mail->Password   = $config['smtp_pass'];
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = $config['smtp_port'];
-            $mail->Timeout    = 60;
-            
-            // Additional SMTP options for better compatibility
-            $mail->SMTPOptions = array(
-                'ssl' => array(
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true
-                )
-            );
-            
-            // Enable debug only if needed (uncomment for troubleshooting)
-            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-        } else {
-            // HOSTING (InfinityFree): use sendmail/mail()
-            $mail->isSendmail();
-            // Fallback to mail() if sendmail fails
-            // $mail->isMail();
-        }
+        // Extra SSL options (for shared hosting / self-signed certs)
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ],
+        ];
 
-        // Set charset
+        // Charset
         $mail->CharSet = 'UTF-8';
 
-        // Email headers
+        // Recipients
         $mail->setFrom($config['from_email'], $config['from_name']);
-        $mail->addAddress($config['from_email'], $config['from_name']); // Send to yourself
-        $mail->addReplyTo($email, $name);         // Reply goes to user
+        $mail->addAddress($config['from_email'], $config['from_name']); // receive yourself
+        $mail->addReplyTo($email, $name); // reply goes to sender
 
-        // Email content
+        // Content
         $mail->isHTML(true);
         $mail->Subject = 'New Contact Form Submission: ' . $subject;
-        
+
         $mail->Body = "
         <!DOCTYPE html>
         <html>
@@ -108,7 +90,7 @@ function sendContactEmail($name, $email, $subject, $message) {
         </body>
         </html>";
 
-        // Plain text version for email clients that don't support HTML
+        // Plain text fallback
         $mail->AltBody = "New Contact Form Submission\n\n" .
                         "Name: {$name}\n" .
                         "Email: {$email}\n" .
@@ -116,13 +98,9 @@ function sendContactEmail($name, $email, $subject, $message) {
                         "Message:\n{$message}\n\n" .
                         "Submitted on: " . date('F j, Y \a\t g:i A');
 
-        $mail->send();
-        return true;
-
+        return $mail->send();
     } catch (Exception $e) {
-        // Log the error for debugging
         error_log("Mailer Error: " . $mail->ErrorInfo);
-        error_log("Exception: " . $e->getMessage());
         return false;
     }
 }
