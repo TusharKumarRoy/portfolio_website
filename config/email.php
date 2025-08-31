@@ -1,15 +1,17 @@
+
 <?php
+$env = require __DIR__ . '/../.env.php';
+
 return [
     // Email addresses
-    'from_email' => 'tusharkumarroy.portfolio@gmail.com',
+    'from_email' => $env['SMTP_USER'] ?? 'tusharkumarroy.portfolio@gmail.com',
     'from_name' => 'Tushar Kumar Roy - Portfolio',
     
-    // Gmail SMTP settings (for local development)
-    'smtp_host' => 'smtp.gmail.com',
-    'smtp_port' => 587,
-    'smtp_user' => 'tusharkumarroy.portfolio@gmail.com',
-    'smtp_pass' => 'pwje ezpl jrct nljx',
-    
+    // SMTP settings (read from environment)
+    'smtp_host' => $env['SMTP_HOST'] ?? 'smtp.gmail.com',
+    'smtp_port' => $env['SMTP_PORT'] ?? 587,
+    'smtp_user' => $env['SMTP_USER'] ?? 'tusharkumarroy.portfolio@gmail.com',
+    'smtp_pass' => $env['SMTP_PASS'] ?? '',
     
     // Additional settings
     'timeout' => 60,
