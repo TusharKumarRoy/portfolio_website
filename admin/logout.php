@@ -1,10 +1,5 @@
 <?php
-/**
- * Admin Logout
- * Destroys session and redirects to login page
- */
 
-// Include functions
 require_once __DIR__ . '/../includes/functions.php';
 
 // Start session if not started

@@ -23,9 +23,9 @@ if (!$project) {
     exit();
 }
 
-// Handle form submission
+
 if ($_POST) {
-    // Validate required fields
+   
     $title = sanitize($_POST['title'] ?? '');
     $short_description = sanitize($_POST['short_description'] ?? '');
     $technologies = sanitize($_POST['technologies'] ?? '');
@@ -34,7 +34,7 @@ if ($_POST) {
     $display_order = (int)($_POST['display_order'] ?? 0);
     $is_visible = isset($_POST['is_visible']) ? 1 : 0;
     
-    // Validation
+
     $errors = [];
     
     if (empty($title)) {
@@ -49,7 +49,6 @@ if ($_POST) {
         $errors[] = 'Technologies field is required';
     }
     
-    // Validate URLs if provided
     if (!empty($project_url) && !filter_var($project_url, FILTER_VALIDATE_URL)) {
         $errors[] = 'Project URL is not valid';
     }
@@ -58,12 +57,12 @@ if ($_POST) {
         $errors[] = 'GitHub URL is not valid';
     }
     
-    // Handle image upload (if new image provided)
-    $image_path = $project['image_path']; // Keep existing image by default
+    // Handle image upload
+    $image_path = $project['image_path'];
     if (isset($_FILES['project_image']) && $_FILES['project_image']['error'] !== UPLOAD_ERR_NO_FILE) {
         $upload_result = uploadProjectImage($_FILES['project_image']);
         if ($upload_result['success']) {
-            // Delete old image if it exists
+
             if (!empty($project['image_path'])) {
                 $old_image_path = __DIR__ . '/../assets/images/' . $project['image_path'];
                 if (file_exists($old_image_path)) {
@@ -76,9 +75,8 @@ if ($_POST) {
         }
     }
     
-    // Handle image removal
+   
     if (isset($_POST['remove_image']) && $_POST['remove_image'] === '1') {
-        // Delete existing image file
         if (!empty($project['image_path'])) {
             $old_image_path = __DIR__ . '/../assets/images/' . $project['image_path'];
             if (file_exists($old_image_path)) {
@@ -103,7 +101,6 @@ if ($_POST) {
         
         if (updateProject($project_id, $project_data)) {
             $success_message = 'Project updated successfully!';
-            // Refresh project data to show updated values
             $project = getProject($project_id);
         } else {
             $error_message = 'Failed to update project. Please try again.';

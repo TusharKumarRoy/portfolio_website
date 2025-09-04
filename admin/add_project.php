@@ -11,7 +11,6 @@ $form_data = [];
 if ($_POST) {
     $form_data = $_POST;
     
-    // Validate required fields
     $title = sanitize($_POST['title'] ?? '');
     $short_description = sanitize($_POST['short_description'] ?? '');
     $technologies = sanitize($_POST['technologies'] ?? '');
@@ -20,7 +19,7 @@ if ($_POST) {
     $display_order = (int)($_POST['display_order'] ?? 0);
     $is_visible = isset($_POST['is_visible']) ? 1 : 0;
     
-    // Validation
+    
     $errors = [];
     
     if (empty($title)) {
@@ -35,7 +34,6 @@ if ($_POST) {
         $errors[] = 'Technologies field is required';
     }
     
-    // Validate URLs if provided
     if (!empty($project_url) && !filter_var($project_url, FILTER_VALIDATE_URL)) {
         $errors[] = 'Project URL is not valid';
     }
@@ -70,7 +68,7 @@ if ($_POST) {
         
         if (addProject($project_data)) {
             $success_message = 'Project added successfully!';
-            $form_data = []; // Clear form data on success
+            $form_data = [];
         } else {
             $error_message = 'Failed to add project. Please try again.';
         }
