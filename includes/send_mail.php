@@ -11,7 +11,7 @@ function sendContactEmail($name, $email, $subject, $message) {
     $mail = new PHPMailer(true);
 
     try {
-        // Always use SMTP (InfinityFree does not allow mail()/sendmail)
+       
         $mail->isSMTP();
         $mail->Host       = $config['smtp_host'];
         $mail->SMTPAuth   = true;
@@ -21,7 +21,7 @@ function sendContactEmail($name, $email, $subject, $message) {
         $mail->Port       = $config['smtp_port'];
         $mail->Timeout    = $config['timeout'] ?? 60;
 
-        // Extra SSL options (for shared hosting / self-signed certs)
+        
         $mail->SMTPOptions = [
             'ssl' => [
                 'verify_peer' => false,
@@ -30,10 +30,10 @@ function sendContactEmail($name, $email, $subject, $message) {
             ],
         ];
 
-        // Charset
+       
         $mail->CharSet = 'UTF-8';
 
-        // Recipients
+        
         $mail->setFrom($config['from_email'], $config['from_name']);
         $mail->addAddress($config['from_email'], $config['from_name']); // receive yourself
         $mail->addReplyTo($email, $name); // reply goes to sender
