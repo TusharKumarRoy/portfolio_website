@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Check if we should show success message via GET parameter (after redirect)
+
 if (isset($_GET['success']) && $_GET['success'] == '1') {
     $contact_success = "Message sent successfully!";
 }
